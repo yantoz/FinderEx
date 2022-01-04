@@ -22,13 +22,20 @@ There are several predefined categories that are created automatically and canno
 Other categories can be added and specifies group of files based on extensions (file suffixes). 
 Several extensions can be defined for a category by joining them with semicolons.
 
+<img src="../assets/finderex1.png?raw=True" width="640" />
+
 When item(s) are right clicked in Finder, all menu items from all matched categories would be added to the context menu, so at least all menu items in the "All Items" category will always be added. When a container (blank space in Finder is right clicked, only menu items from "Container" category would be added.
 
 Menu items for each category can be added/edited/deleted by selecting the category and then right clicking the category or the "Right-click Here ..." area. This would bring up the menu. Select an item to edit or delete it or select "Add New Item ..." to add new item.
 
+<img src="../assets/finderex2.png?raw=True" width="640" />
+<img src="../assets/finderex3.png?raw=True" width="640" />
+
 Each menu item, when selected, can be defined to do action that you choose: run an Applescript, a Bash script or an Automator workflow.
 They would get selected items' path as their input, as arguments to Applescripts and Bash scripts and as standard input to Automator workflows.
 Applescripts and Bash scripts can be written directly in the editor so you do not have to create and store script files, although you can do so as well. Automator workflows need to be pre-created, and you need to tell FinderEx which .wflow file to launch.
+
+<img src="../assets/finderex4.png?raw=True" width="640" />
 
 FinderEx editor loads and saves configuration as YAML file in ~/Library/FinderEx/config.yaml but the FinderSync extension loads configurations from both /Library/FinderEx/config.yaml (system wide) and ~/Library/FinderEx/config.yaml (user specific), so you can create system wide configuration available for all users as well as one for yourself.
 
