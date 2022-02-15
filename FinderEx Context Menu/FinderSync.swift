@@ -73,10 +73,37 @@ class FinderSync: FIFinderSync {
 
         config = loadConfig()
         
-        // Set up the directory to sync
+        let fs = FIFinderSyncController.default()
+
+        // Monitor all currently visible mounted volumes
         // TODO: make this user configurable
-        FIFinderSyncController.default().directoryURLs = [URL(fileURLWithPath: "/")]
+        if let mountedVolumes = FileManager.default.mountedVolumeURLs(
+            includingResourceValuesForKeys: nil,
+            options: .skipHiddenVolumes) {
+            fs.directoryURLs = Set<URL>(mountedVolumes)
+        }
         
+        // Also handle changes in mounted volumes
+        // TODO: make this user configurable
+        let nc = NSWorkspace.shared.notificationCenter
+        nc.addObserver(forName: NSWorkspace.didMountNotification, object: nil, queue: .main) { n in
+            if let url = n.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
+                fs.directoryURLs.insert(url)
+            }
+        }
+        nc.addObserver(forName: NSWorkspace.didUnmountNotification, object: nil, queue: .main) { n in
+            if let url = n.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
+                fs.directoryURLs.remove(url)
+            }
+        }
+        nc.addObserver(forName: NSWorkspace.didRenameVolumeNotification, object: nil, queue: .main) { n in
+            if let url = n.userInfo?[NSWorkspace.oldVolumeURLUserInfoKey] as? URL {
+                fs.directoryURLs.remove(url)
+            }
+            if let url = n.userInfo?[NSWorkspace.volumeURLUserInfoKey] as? URL {
+                fs.directoryURLs.insert(url)
+            }
+        }
     }
     
     private func loadConfig() -> [ConfigItem] {
